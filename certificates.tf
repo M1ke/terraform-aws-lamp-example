@@ -6,7 +6,7 @@ resource "aws_acm_certificate" "default" {
     Name = "${var.domain} certificate"
   }
 
-  subject_alternative_names = ["${var.domain}"]
+  subject_alternative_names = []
 }
 
 resource "aws_route53_record" "acm-validation" {

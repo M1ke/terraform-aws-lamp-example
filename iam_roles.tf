@@ -50,12 +50,22 @@ resource "aws_iam_policy" "ec2" {
         "ec2:Describe*"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject*",
+        "s3:ListBucket*"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.deploy.arn}",
+        "${aws_s3_bucket.deploy.arn}/*"
+      ]
     }
   ]
 }
 POLICY
 }
-
 
 resource "aws_iam_policy_attachment" "ec2" {
   name = "ec2"

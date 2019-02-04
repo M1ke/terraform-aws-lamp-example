@@ -4,6 +4,9 @@ resource "aws_lb" "example" {
   name = "example"
   security_groups = [
     "${aws_security_group.web.id}"]
+  subnets = ["${data.aws_subnet_ids.default.ids[0]}",
+    "${data.aws_subnet_ids.default.ids[1]}",
+    "${data.aws_subnet_ids.default.ids[2]}"]
 
   enable_deletion_protection = true
 

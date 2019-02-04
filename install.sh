@@ -14,7 +14,10 @@ sudo sh -c "echo 'Europe/London' > /etc/timezone"
 sudo dpkg-reconfigure -f noninteractive tzdata
 
 # Used in various places
-DEBIAN_FRONTEND=noninteractive sudo apt install -yq build-essential software-properties-common binutils git make tree jq php7.2 php7.2-json php7.2-mysql php7.2-dev php7.2-curl mysql-client-5.6 libmysqlclient-dev libapache2-mod-php7.2 python
+DEBIAN_FRONTEND=noninteractive sudo apt install -yq build-essential software-properties-common binutils git make tree jq php7.2 php7.2-json php7.2-mysql php7.2-dev php7.2-curl mysql-client-5.6 libmysqlclient-dev libapache2-mod-php7.2 python python3 python3-pip
+
+# AWS CLI
+sudo pip3 install awscli
 
 # Install cloudwatch logs
 sudo rm "/var/log/cloud-init-output.log"
@@ -30,4 +33,9 @@ cd efs-utils
 ./build-deb.sh
 sudo apt-get -y install ./build/amazon-efs-utils*deb
 
+# Systems manager
+sudo snap refresh amazon-ssm-agent --classic
+sudo snap services amazon-ssm-agent
+
 sudo apt autoremove
+sudo apt clean

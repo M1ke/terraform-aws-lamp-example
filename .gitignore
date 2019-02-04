@@ -2,4 +2,4 @@
 terraform.tfvars
 .terraform/
 .idea/
-*.tfstate*.backup
+*.tfstate*

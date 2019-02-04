@@ -22,11 +22,11 @@ Pull the repo from `https://github.com/M1ke/aws-s3-pull-deploy`. This tool conta
 
 * LOCK_DIR: This directory will be used to lock deployments. The best location would be `/efs/deploy`
 * BUCKET: The name of the bucket you just chose
-* EMAIL_NOTIFY: The email address to send reports of deployments or errors to
-* EMAIL_FROM: NEED TO WORK OUT HOW WE SET THIS
-* OWNER: The owning user/group of all deployed files. On an apache setup this would often be 'www-data'
+* DOMAIN: The domain that will be created on web servers at `/var/www/your.domain.com`
 * NICKNAME: A short name for your site to allow multiple sites to deploy from one bucket
-* DOMAIN: The domain that will be created on web servers at `/var/www/your-domain.com`
+* EMAIL_NOTIFY: The email address to send reports of deployments or errors to
+* EMAIL_FROM: Must be the same domain as set above, e.g. "deploy@your.domain.com"
+* OWNER: The owning user/group of all deployed files. On an apache setup this would often be 'www-data'
 * CMD: An optional line of script to eval at the end of the deploy process, e.g. create files, load crontab
 
 Once this is created save as `config.yml` and run `python3 push-deploy.py --show` to check the config.

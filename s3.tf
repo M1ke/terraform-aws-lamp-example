@@ -45,6 +45,6 @@ resource "aws_s3_bucket" "deploy" {
   acl = "private"
 
   tags {
-    Name = "Deploy the application here to have instances pull it"
+    Name = "Application deployment"
   }
 }
