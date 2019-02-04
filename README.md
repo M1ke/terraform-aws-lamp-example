@@ -12,6 +12,13 @@ In all cases ensure these are accessible in your `$PATH`, i.e. typing `type aws`
 
 ## Configuring AWS on your local environment
 
+_Mention about getting root keys, why this is bad etc._
+
+```
+sudo pip3 install awscli
+aws configure
+```
+
 ## Deploying your application
 
 Using the S3 console create a bucket which will be used to deploy your application. The one concern with S3 names is that they must be _globally unique_ so two accounts cannot have an S3 bucket with the same name. A good idea could be to prefix your bucket name with your name and the name of the project you are working on - this means you avoid collisions with other people on this course and with your own future projects.
