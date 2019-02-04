@@ -34,6 +34,11 @@
       "destination": "/tmp/awslogs.conf"
     },
     {
+      "type": "file",
+      "source": "aws.config",
+      "destination": "/tmp/aws.config"
+    },
+    {
       "type": "shell",
       "script": "install.sh"
     }

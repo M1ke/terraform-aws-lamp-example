@@ -18,6 +18,7 @@ DEBIAN_FRONTEND=noninteractive sudo apt install -yq build-essential software-pro
 
 # AWS CLI
 sudo pip3 install awscli
+sudo pip3 install boto3
 
 # Install cloudwatch logs
 sudo rm "/var/log/cloud-init-output.log"
@@ -36,6 +37,14 @@ sudo apt-get -y install ./build/amazon-efs-utils*deb
 # Systems manager
 sudo snap refresh amazon-ssm-agent --classic
 sudo snap services amazon-ssm-agent
+
+file_config="/tmp/aws.config"
+mkdir -p /root/.aws /home/ssm-user/.aws
+cp "$file_config" /root/.aws/config
+cp "$file_config" /home/ssm-user/.aws/config
+rm "$file_config"
+
+cd ~
 
 sudo apt autoremove
 sudo apt clean

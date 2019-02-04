@@ -61,6 +61,13 @@ resource "aws_iam_policy" "ec2" {
         "${aws_s3_bucket.deploy.arn}",
         "${aws_s3_bucket.deploy.arn}/*"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ses:SendEmail",
+      ],
+      "Resource": "*"
     }
   ]
 }
