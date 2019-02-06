@@ -79,7 +79,6 @@ resource "aws_security_group_rule" "ec2-web-https-in" {
   security_group_id = "${aws_security_group.ec2-web.id}"
 }
 
-
 resource "aws_security_group" "efs" {
   name = "efs"
   description = "EFS mount"
@@ -110,7 +109,7 @@ resource "aws_security_group_rule" "efs-outbound" {
 }
 
 resource "aws_security_group" "web" {
-  name = "live-web"
+  name = "web"
   description = "Live 443 and 80 for load balancers"
   vpc_id = "${var.vpc_id}"
 

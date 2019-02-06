@@ -35,7 +35,7 @@ resource "aws_lb_target_group" "web" {
 
   health_check {
     protocol = "HTTP"
-    path = "/aws-health-check"
+    path = "/aws-health-check/"
     port = 80
     healthy_threshold = 2
     unhealthy_threshold = 3

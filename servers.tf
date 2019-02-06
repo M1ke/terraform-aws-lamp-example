@@ -51,6 +51,7 @@ resource "aws_launch_configuration" "web" {
     "${aws_security_group.ec2-web.id}"]
   enable_monitoring = false
   ebs_optimized = false
+  associate_public_ip_address = false
   user_data = <<DATA
 #!/bin/bash
 
@@ -98,6 +99,9 @@ python3 "$deploy_tool_dir/pull-deploy.py" --show
 # This runs a deploy
 mkdir -p /var/www
 python3 "$deploy_tool_dir/pull-deploy.py" --pull
+sed -i 's/\/var\/www\/html/\/var\/www\/${var.domain}\/active/' /etc/apache2/sites-available/000-default.conf
+sed -i 's/\/var\/www\/html/\/var\/www\/${var.domain}\/active/' /etc/apache2/sites-available/default-ssl.conf
+service apache2 restart
 
 # crontab /efs/cron/root-cron
 DATA

@@ -45,6 +45,10 @@ sudo cp "$file_config" /home/ssm-user/.aws/config
 sudo chmod 664 /home/ssm-user/.aws/config
 rm "$file_config"
 
+sudo a2enmod ssl
+sudo a2ensite default-ssl.conf
+sudo service apache2 restart
+
 cd ~
 
 sudo apt autoremove
