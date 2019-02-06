@@ -39,9 +39,10 @@ sudo snap refresh amazon-ssm-agent --classic
 sudo snap services amazon-ssm-agent
 
 file_config="/tmp/aws.config"
-mkdir -p /root/.aws /home/ssm-user/.aws
-cp "$file_config" /root/.aws/config
-cp "$file_config" /home/ssm-user/.aws/config
+sudo mkdir -p /root/.aws /home/ssm-user/.aws
+sudo cp "$file_config" /root/.aws/config
+sudo cp "$file_config" /home/ssm-user/.aws/config
+sudo chmod 664 /home/ssm-user/.aws/config
 rm "$file_config"
 
 cd ~

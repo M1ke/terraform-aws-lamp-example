@@ -65,7 +65,7 @@ resource "aws_iam_policy" "ec2" {
     {
       "Effect": "Allow",
       "Action": [
-        "ses:SendEmail",
+        "ses:SendEmail"
       ],
       "Resource": "*"
     }

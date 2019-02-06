@@ -1,5 +1,5 @@
 resource "aws_lb" "example" {
-  idle_timeout = 300
+  idle_timeout = 60
   internal = false
   name = "example"
   security_groups = [

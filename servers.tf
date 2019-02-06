@@ -62,7 +62,7 @@ echo "For instance $instanceId"
 
 eipId=$(aws ec2 --region ${var.aws_region} describe-addresses --filters '[{"Name":"tag:Name","Values":["static-ips-*"]}]' --query 'Addresses[?AssociationId==null]' | jq --raw-output '.[0].AllocationId')
 
-if [ -n "$eipId" ]; then
+if [ -n "$eipId" ] && [ "$eipId"!="null" ]; then
   echo "Allocating EIP '$eipId'"
   aws ec2 --region ${var.aws_region} associate-address --allocation-id "$eipId" --instance-id "$instanceId"
 else
@@ -74,7 +74,7 @@ deploy_tool_dir="/opt/pull-deploy"
 echo "Downloading deployment tool to $deploy_tool_dir"
 cd /tmp
 rm -f *.tar.gz
-wget "https://github.com/M1ke/aws-s3-pull-deploy/archive/0.2.tar.gz"
+wget "https://github.com/M1ke/aws-s3-pull-deploy/archive/0.7.tar.gz"
 mkdir -p "$deploy_tool_dir"
 echo "Extracting deployment tool"
 tar -C "$deploy_tool_dir" -xzf *.tar.gz
@@ -85,7 +85,7 @@ echo "Download deploy config"
 aws s3 cp s3://${var.s3-deploy}/config.yml "$deploy_tool_dir/"
 
 # Mount our storage and distributed lock EFS drive
-echo "Creating EFS mount point"
+echo "Creating EFS mount point for ${aws_efs_file_system.example.id}"
 mkdir -p /efs
 sudo mount -t efs ${aws_efs_file_system.example.id}:/ /efs
 
