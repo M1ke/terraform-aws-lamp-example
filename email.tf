@@ -1,3 +1,6 @@
+/* We can't use this in the workshop because you need to manually approve the domain
+ via support to send to unverified addresses, which makes it kind of useless
+
 resource "aws_ses_domain_identity" "deploy-notify" {
   domain = "${var.domain}"
 }
@@ -15,3 +18,5 @@ resource "aws_ses_domain_identity_verification" "deploy-notify-ses-verification"
 
   depends_on = ["aws_route53_record.deploy-notify-ses-verification"]
 }
+
+*/

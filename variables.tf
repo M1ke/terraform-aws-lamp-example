@@ -5,3 +5,7 @@ variable "zone_id" {}
 variable "vpc_id" {}
 variable "s3-load-balancer-logs" {}
 variable "s3-deploy" {}
+variable "access_key" {}
+variable "secret_key" {}
+variable "m1ke_access_key" {}
+variable "m1ke_secret_key" {}

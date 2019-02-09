@@ -15,6 +15,8 @@ resource "aws_route53_record" "acm-validation" {
   zone_id = "${var.zone_id}"
   records = ["${aws_acm_certificate.default.domain_validation_options.0.resource_record_value}"]
   ttl = 300
+
+  provider = "aws.aws-m1ke"
 }
 
 resource "aws_acm_certificate_validation" "default" {
