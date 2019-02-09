@@ -4,8 +4,8 @@
 
 Install the following locally:
 
-* AWS CLI
-* Packer
+* [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html#install-tool-pip)
+* [Packer](https://www.packer.io/intro/getting-started/install.html#precompiled-binaries)
 * [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html)
 
 In all cases ensure these are accessible in your `$PATH`, i.e. typing `type aws`, `type packer` or `type terraform` in a terminal should show the path to the relevant executable.
