@@ -57,7 +57,7 @@ An AMI allows you to save a known good configuration of a server. It offers reli
 Run packer with:
 
 ```
-packer build server-web.json
+packer build ami-web/server-web.json
 ```
 
 Packer will report the various AWS CLI commands it issues as well as the output from install scripts. Once complete the AMI will be saved along with a date and time. If Packer fails for any reason no new AMI is created, avoiding you accidentally deploying servers based off an AMI with an unexpected configuration.
