@@ -2,6 +2,18 @@ data "aws_subnet_ids" "default" {
   vpc_id = "${var.vpc_id}"
 }
 
+resource "aws_eip" "static-ips-1" {
+  tags {
+    Name = "static-ips-1"
+  }
+}
+
+resource "aws_eip" "static-ips-2" {
+  tags {
+    Name = "static-ips-2"
+  }
+}
+
 resource "aws_security_group" "db" {
   name = "db"
   description = "Allows other servers database access"

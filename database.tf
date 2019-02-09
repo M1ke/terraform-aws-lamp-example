@@ -1,6 +1,6 @@
 resource "aws_db_instance" "example" {
   identifier = "example"
-  allocated_storage = 5
+  allocated_storage = 20
   storage_type = "gp2"
   engine = "mysql"
   instance_class = "db.t2.micro"
@@ -31,60 +31,13 @@ output "db-endpoint" {
   value = "${aws_db_instance.example.endpoint}"
 }
 
-resource "aws_db_parameter_group" "example" {
-  name   = "example"
+resource "aws_db_parameter_group" "basic" {
+  name   = "basic"
   family = "mysql5.6"
-  description = "example"
+  description = "Minor tweaks to regular mysql config"
 
   parameter {
     name  = "time_zone"
     value = "europe/dublin"
-  }
-
-  // This can impact various parts of how the database functions. The main differences
-  // are that file per table is harder to restore as the database size increases. However
-  // file per table makes it easier to regain hard disk space after data is deleted
-  parameter {
-    name  = "innodb_file_per_table"
-    value = "1"
-  }
-
-  parameter {
-    apply_method = "pending-reboot"
-    name  = "innodb_buffer_pool_size"
-    value = "{DBInstanceClassMemory*1/2}"
-  }
-
-  parameter {
-    name  = "log_output"
-    value = "file"
-  }
-
-  parameter {
-    name  = "log_warnings"
-    value = "0"
-  }
-
-  parameter {
-    name  = "general_log"
-    value = "0"
-  }
-
-  parameter {
-    name  = "slow_query_log"
-    value = "1"
-  }
-
-  parameter {
-    name  = "log_queries_not_using_indexes"
-    value = "0"
-  }
-
-  parameter {
-    name  = "log_bin_trust_function_creators"
-    value = "1"
-  }
-
-  tags {
   }
 }
