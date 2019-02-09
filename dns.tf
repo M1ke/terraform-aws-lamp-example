@@ -9,7 +9,3 @@ resource "aws_route53_record" "example-load-balancer-A" {
     evaluate_target_health = false
   }
 }
-
-output "visit-your-website" {
-  value = "https://${var.domain}"
-}
