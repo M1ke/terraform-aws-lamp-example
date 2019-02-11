@@ -65,9 +65,12 @@ resource "aws_iam_policy" "ec2" {
     {
       "Effect": "Allow",
       "Action": [
-        "ses:SendEmail"
+        "sns:Publish"
       ],
-      "Resource": "*"
+      "Resource": [
+        "${aws_sns_topic.ec2-web-deploy-success.arn}",
+        "${aws_sns_topic.ec2-web-deploy-error.arn}"
+      ]
     }
   ]
 }
