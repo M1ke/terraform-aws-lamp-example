@@ -8,9 +8,7 @@ resource "aws_lb" "example" {
     "${data.aws_subnet_ids.default.ids[1]}",
     "${data.aws_subnet_ids.default.ids[2]}"]
 
-  # Good idea to enable this once you are running a production website
-  #  To delete, first change this to 'false' and apply, then destroy
-  enable_deletion_protection = false
+  enable_deletion_protection = "${var.production}"
 
   access_logs {
     bucket = "${aws_s3_bucket.elb-logs.bucket}"

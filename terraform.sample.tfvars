@@ -5,6 +5,7 @@ zone_id = ""
 vpc_id = ""
 s3-load-balancer-logs = ""
 s3-deploy = ""
+production = 0
 access_key = ""
 secret_key = ""
 m1ke_access_key = ""

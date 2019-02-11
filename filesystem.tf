@@ -1,7 +1,7 @@
 resource "aws_efs_file_system" "example" {
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = "${var.production}"
   }
 
   tags {

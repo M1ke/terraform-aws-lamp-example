@@ -28,8 +28,7 @@ resource "aws_autoscaling_group" "web" {
     "${data.aws_subnet_ids.default.ids[0]}",
     "${data.aws_subnet_ids.default.ids[1]}",
     "${data.aws_subnet_ids.default.ids[2]}"]
-  # Enable this once happy with initial deployment
-  # min_elb_capacity = 1
+  min_elb_capacity = 1
 
   lifecycle {
     create_before_destroy = true
@@ -52,6 +51,7 @@ resource "aws_launch_configuration" "web" {
   enable_monitoring = false
   ebs_optimized = false
   associate_public_ip_address = false
+
   user_data = <<DATA
 #!/bin/bash
 
@@ -103,6 +103,9 @@ sed -i 's/\/var\/www\/html/\/var\/www\/${var.domain}\/active/' /etc/apache2/site
 sed -i 's/\/var\/www\/html/\/var\/www\/${var.domain}\/active/' /etc/apache2/sites-available/default-ssl.conf
 service apache2 restart
 
+mkdir -p /opt/aws/
+echo "${aws_db_instance.example.endpoint}" > /opt/aws/rds-endpoint
+
 # crontab /efs/cron/root-cron
 DATA
 
@@ -110,7 +113,9 @@ DATA
     create_before_destroy = true
   }
 
-  depends_on = ["aws_efs_file_system.example", "aws_cloudwatch_log_group.ec2-init"]
+  depends_on = [
+    "aws_efs_file_system.example",
+    "aws_cloudwatch_log_group.ec2-init"]
 
   root_block_device {
     volume_type = "gp2"
