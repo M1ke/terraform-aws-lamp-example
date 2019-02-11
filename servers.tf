@@ -75,7 +75,7 @@ deploy_tool_dir="/opt/pull-deploy"
 echo "Downloading deployment tool to $deploy_tool_dir"
 cd /tmp
 rm -f *.tar.gz
-wget "https://github.com/M1ke/aws-s3-pull-deploy/archive/0.9.tar.gz"
+wget "https://github.com/M1ke/aws-s3-pull-deploy/archive/0.11.tar.gz"
 mkdir -p "$deploy_tool_dir"
 echo "Extracting deployment tool"
 tar -C "$deploy_tool_dir" -xzf *.tar.gz
