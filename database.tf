@@ -17,14 +17,13 @@ resource "aws_db_instance" "example" {
   maintenance_window = "mon:06:00-mon:06:30"
   final_snapshot_identifier = "example-db-final"
   monitoring_interval = 0
-  skip_final_snapshot = false
-  apply_immediately = true
-  enabled_cloudwatch_logs_exports = ["error", "slowquery"]
+  skip_final_snapshot = "${var.production ? false : true}"
+  apply_immediately = "${var.production ? false : true}"
+  deletion_protection = "${var.production}"
+  enabled_cloudwatch_logs_exports = [
+    "error",
+    "slowquery"]
 
   tags {
   }
-}
-
-output "db-endpoint" {
-  value = "${aws_db_instance.example.endpoint}"
 }
