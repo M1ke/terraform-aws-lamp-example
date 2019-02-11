@@ -106,7 +106,11 @@ service apache2 restart
 mkdir -p /opt/aws/
 echo "${aws_db_instance.example.endpoint}" > /opt/aws/rds-endpoint
 
-# crontab /efs/cron/root-cron
+mkdir -p /var/log/cron/root
+crontab <<EOF
+# m h  dom mon dow   command
+* * * * * python3 "$deploy_tool_dir/pull-deploy.py" --pull >> /var/log/cron/root/deploy
+EOF
 DATA
 
   lifecycle {
