@@ -18,3 +18,7 @@ output "static-ips" {
 output "run-to-view-logs" {
   value = "Run to view logs: awslogs get ${aws_cloudwatch_log_group.ec2-init.name} ALL --watch"
 }
+
+output "sns-topics" {
+  value = "Add these to receive deploy notifications. Success: ${aws_sns_topic.ec2-web-deploy-success.arn}, Error: ${aws_sns_topic.ec2-web-deploy-error.arn}"
+}
