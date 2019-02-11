@@ -1,0 +1,3 @@
+#!/bin/bash
+
+terraform apply --target=aws_s3_bucket.deploy --target=aws_sns_topic.ec2-web-deploy-error --target=aws_sns_topic.ec2-web-deploy-success --auto-approve
