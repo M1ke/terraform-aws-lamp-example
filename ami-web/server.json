@@ -4,8 +4,8 @@
       "type": "amazon-ebs",
       "region": "eu-west-1",
       "instance_type": "t2.micro",
-      "ssh_username": "ubuntu",
       "ami_name": "web-{{ isotime \"2006-01-02-15-04\" }}",
+      "ssh_username": "ubuntu",
       "ami_block_device_mappings": [
         {
           "delete_on_termination": true,
@@ -30,17 +30,17 @@
   "provisioners": [
     {
       "type": "file",
-      "source": "awslogs.conf",
+      "source": "ami-web/awslogs.conf",
       "destination": "/tmp/awslogs.conf"
     },
     {
       "type": "file",
-      "source": "aws.config",
+      "source": "ami-web/aws.config",
       "destination": "/tmp/aws.config"
     },
     {
       "type": "shell",
-      "script": "install.sh"
+      "script": "ami-web/install.sh"
     }
   ]
 }
