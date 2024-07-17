@@ -6,11 +6,6 @@ resource "aws_s3_bucket" "elb-logs" {
   }
 }
 
-resource "aws_s3_bucket_acl" "elb-logs" {
-  bucket = aws_s3_bucket.elb-logs.bucket
-  acl = "private"
-}
-
 resource "aws_s3_bucket_lifecycle_configuration" "elb-logs" {
   bucket = aws_s3_bucket.elb-logs.bucket
 
@@ -29,7 +24,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "elb-logs" {
 data "aws_iam_policy_document" "elb-logs" {
   statement {
     effect    = "Allow"
-    resources = ["${aws_s3_bucket.elb-logs.arn}/example/AWSLogs/${var.aws_id}/*"]
+    resources = ["${aws_s3_bucket.elb-logs.arn}/*"]
     actions   = ["s3:PutObject"]
 
     principals {
@@ -50,9 +45,4 @@ resource "aws_s3_bucket" "deploy" {
   tags = {
     Name = "Application deployment"
   }
-}
-
-resource "aws_s3_bucket_acl" "deploy" {
-  bucket = aws_s3_bucket.deploy.bucket
-  acl = "private"
 }

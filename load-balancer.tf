@@ -13,6 +13,8 @@ resource "aws_lb" "example" {
     prefix = "example"
   }
 
+  drop_invalid_header_fields = true
+
   tags = {
   }
 }
@@ -30,7 +32,7 @@ resource "aws_lb_target_group" "web" {
 
   health_check {
     protocol = "HTTP"
-    path = "/aws-health-check/"
+    path = "/"
     port = 80
     healthy_threshold = 2
     unhealthy_threshold = 3
@@ -47,7 +49,7 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.example.arn
   port = 443
   protocol = "HTTPS"
-  ssl_policy = "ELBSecurityPolicy-2016-08"
+  ssl_policy = "ELBSecurityPolicy-FS-1-2-Res-2019-08"
   certificate_arn = aws_acm_certificate.default.arn
 
   default_action {

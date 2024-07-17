@@ -12,6 +12,7 @@ resource "aws_iam_instance_profile" "ec2-web" {
 }
 
 resource "aws_launch_template" "web" {
+  name="web"
   image_id = data.aws_ami.web-ami.id
   instance_type = "t3.micro"
   iam_instance_profile {
@@ -47,18 +48,21 @@ resource "aws_launch_template" "web" {
 resource "aws_autoscaling_group" "web" {
   health_check_grace_period = 300
   health_check_type = "EC2"
-  launch_configuration = aws_launch_template.web.name
+  launch_template {
+    id =  aws_launch_template.web.id
+    version = "$Latest"
+  }
   max_size = 1
   min_size = 1
-  name = "example-${aws_launch_template.web.name}"
+  name = "example-${aws_launch_template.web.latest_version}"
   termination_policies = [
-    "OldestLaunchConfiguration"]
+    "OldestInstance"]
   wait_for_capacity_timeout = "10m"
   metrics_granularity = "1Minute"
   target_group_arns = [
     aws_lb_target_group.web.arn
   ]
-  vpc_zone_identifier = toset(data.aws_subnets.default.id)
+  vpc_zone_identifier = [for subnet in data.aws_subnet.default : subnet.id]
   min_elb_capacity = 1
 
   lifecycle {
@@ -69,5 +73,11 @@ resource "aws_autoscaling_group" "web" {
     key = "ami"
     propagate_at_launch = true
     value = data.aws_ami.web-ami.name
+  }
+
+  tag {
+    key = "Name"
+    propagate_at_launch = true
+    value = "Web server"
   }
 }
