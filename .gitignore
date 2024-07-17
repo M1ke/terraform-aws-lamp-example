@@ -4,3 +4,4 @@ terraform.tfvars
 .idea/
 *.tfstate*
 destroy-web
+.terraform.lock.hcl

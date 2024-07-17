@@ -3,20 +3,17 @@ resource "aws_lb" "example" {
   internal = false
   name = "example"
   security_groups = [
-    "${aws_security_group.web.id}"]
-  subnets = ["${data.aws_subnet_ids.default.ids[0]}",
-    "${data.aws_subnet_ids.default.ids[1]}",
-    "${data.aws_subnet_ids.default.ids[2]}"]
-
-  enable_deletion_protection = "${var.production}"
+    aws_security_group.web.id
+  ]
+  subnets = [for subnet in data.aws_subnet.default : subnet.id]
 
   access_logs {
-    bucket = "${aws_s3_bucket.elb-logs.bucket}"
+    bucket = aws_s3_bucket.elb-logs.bucket
     enabled = true
     prefix = "example"
   }
 
-  tags {
+  tags = {
   }
 }
 
@@ -24,7 +21,7 @@ resource "aws_lb_target_group" "web" {
   name = "example"
   port = 443
   protocol = "HTTPS"
-  vpc_id = "${var.vpc_id}"
+  vpc_id = var.vpc_id
   deregistration_delay = 60
 
   stickiness {
@@ -42,25 +39,25 @@ resource "aws_lb_target_group" "web" {
     matcher = "200-299"
   }
 
-  tags {
+  tags = {
   }
 }
 
 resource "aws_lb_listener" "https" {
-  load_balancer_arn = "${aws_lb.example.arn}"
+  load_balancer_arn = aws_lb.example.arn
   port = 443
   protocol = "HTTPS"
   ssl_policy = "ELBSecurityPolicy-2016-08"
-  certificate_arn = "${aws_acm_certificate.default.arn}"
+  certificate_arn = aws_acm_certificate.default.arn
 
   default_action {
     type = "forward"
-    target_group_arn = "${aws_lb_target_group.web.arn}"
+    target_group_arn = aws_lb_target_group.web.arn
   }
 }
 
 resource "aws_lb_listener" "http" {
-  load_balancer_arn = "${aws_lb.example.arn}"
+  load_balancer_arn = aws_lb.example.arn
   port = 80
   protocol = "HTTP"
 

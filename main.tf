@@ -1,27 +1,31 @@
 provider "aws" {
-  region = "${var.aws_region}"
-  version = "~> 1.7"
-
-  access_key = "${var.access_key}"
-  secret_key = "${var.secret_key}"
-}
-
-provider "aws" {
   region = "eu-west-1"
-  version = "~> 1.7"
-
-  alias = "aws-m1ke"
-
-  access_key = "${var.m1ke_access_key}"
-  secret_key = "${var.m1ke_secret_key}"
 }
+
+terraform {
+  required_providers {
+    archive = {
+      source = "hashicorp/archive"
+    }
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 4"
+    }
+    template = {
+      source = "hashicorp/template"
+    }
+  }
+  required_version = ">= 1.2"
+}
+
+
 
 output "visit-your-website" {
   value = "https://${var.domain}"
 }
 
 output "db-endpoint" {
-  value = "${aws_db_instance.example.endpoint}"
+  value = aws_db_instance.example.endpoint
 }
 
 output "static-ips" {

@@ -1,15 +1,34 @@
-data "aws_subnet_ids" "default" {
-  vpc_id = "${var.vpc_id}"
+data "aws_vpc" "main" {
+  default = true
+}
+
+data "aws_subnets" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.main.id]
+  }
+  filter {
+    name   = "default-for-az"
+    values = [true]
+  }
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
+}
+data "aws_subnet" "default" {
+  for_each = toset(data.aws_subnets.default.ids)
+  id       = each.value
 }
 
 resource "aws_eip" "static-ips-1" {
-  tags {
+  tags = {
     Name = "static-ips-1"
   }
 }
 
 resource "aws_eip" "static-ips-2" {
-  tags {
+  tags = {
     Name = "static-ips-2"
   }
 }
@@ -17,10 +36,10 @@ resource "aws_eip" "static-ips-2" {
 resource "aws_security_group" "db" {
   name = "db"
   description = "Allows other servers database access"
-  vpc_id = "${var.vpc_id}"
+  vpc_id = var.vpc_id
 
-  tags {
-    "Name" = "Database internal access"
+  tags = {
+    Name = "Database internal access"
   }
 }
 resource "aws_security_group_rule" "db-mysql" {
@@ -28,9 +47,9 @@ resource "aws_security_group_rule" "db-mysql" {
   from_port = 3306
   to_port = 3306
   protocol = "tcp"
-  source_security_group_id = "${aws_security_group.ec2.id}"
+  source_security_group_id = aws_security_group.ec2.id
 
-  security_group_id = "${aws_security_group.db.id}"
+  security_group_id = aws_security_group.db.id
 }
 resource "aws_security_group_rule" "db-outbound" {
   type = "egress"
@@ -40,16 +59,16 @@ resource "aws_security_group_rule" "db-outbound" {
   cidr_blocks = [
     "0.0.0.0/0"]
 
-  security_group_id = "${aws_security_group.db.id}"
+  security_group_id = aws_security_group.db.id
 }
 
 resource "aws_security_group" "ec2" {
   name = "ec2"
   description = "EC2 instances, allow to connect to internal database and make outbound connections"
-  vpc_id = "${var.vpc_id}"
+  vpc_id = var.vpc_id
 
-  tags {
-    "Name" = "EC2"
+  tags = {
+    Name = "EC2"
   }
 }
 resource "aws_security_group_rule" "ec2-outbound" {
@@ -60,16 +79,16 @@ resource "aws_security_group_rule" "ec2-outbound" {
   cidr_blocks = [
     "0.0.0.0/0"]
 
-  security_group_id = "${aws_security_group.ec2.id}"
+  security_group_id = aws_security_group.ec2.id
 }
 
 resource "aws_security_group" "ec2-web" {
   name = "ec-web2"
   description = "EC2 instances, allow to connect to internal database and be connected to from load balancer"
-  vpc_id = "${var.vpc_id}"
+  vpc_id = var.vpc_id
 
-  tags {
-    "Name" = "EC2 Web"
+  tags = {
+    Name = "EC2 Web"
   }
 }
 resource "aws_security_group_rule" "ec2-web-http-in" {
@@ -77,27 +96,27 @@ resource "aws_security_group_rule" "ec2-web-http-in" {
   from_port = 80
   to_port = 80
   protocol = "tcp"
-  source_security_group_id = "${aws_security_group.web.id}"
+  source_security_group_id = aws_security_group.web.id
 
-  security_group_id = "${aws_security_group.ec2-web.id}"
+  security_group_id = aws_security_group.ec2-web.id
 }
 resource "aws_security_group_rule" "ec2-web-https-in" {
   type = "ingress"
   from_port = 443
   to_port = 443
   protocol = "tcp"
-  source_security_group_id = "${aws_security_group.web.id}"
+  source_security_group_id = aws_security_group.web.id
 
-  security_group_id = "${aws_security_group.ec2-web.id}"
+  security_group_id = aws_security_group.ec2-web.id
 }
 
 resource "aws_security_group" "efs" {
   name = "efs"
   description = "EFS mount"
-  vpc_id = "${var.vpc_id}"
+  vpc_id = var.vpc_id
 
-  tags {
-    "Name" = "EFS access"
+  tags = {
+    Name = "EFS access"
   }
 }
 resource "aws_security_group_rule" "efs-from-ec2" {
@@ -105,9 +124,9 @@ resource "aws_security_group_rule" "efs-from-ec2" {
   from_port = 2049
   to_port = 2049
   protocol = "tcp"
-  source_security_group_id = "${aws_security_group.ec2.id}"
+  source_security_group_id = aws_security_group.ec2.id
 
-  security_group_id = "${aws_security_group.efs.id}"
+  security_group_id = aws_security_group.efs.id
 }
 resource "aws_security_group_rule" "efs-outbound" {
   type = "egress"
@@ -117,16 +136,16 @@ resource "aws_security_group_rule" "efs-outbound" {
   cidr_blocks = [
     "0.0.0.0/0"]
 
-  security_group_id = "${aws_security_group.efs.id}"
+  security_group_id = aws_security_group.efs.id
 }
 
 resource "aws_security_group" "web" {
   name = "web"
   description = "Live 443 and 80 for load balancers"
-  vpc_id = "${var.vpc_id}"
+  vpc_id = var.vpc_id
 
-  tags {
-    "Name" = "Web access"
+  tags = {
+    Name = "Web access"
   }
 }
 resource "aws_security_group_rule" "web-http" {
@@ -137,7 +156,7 @@ resource "aws_security_group_rule" "web-http" {
   cidr_blocks = [
     "0.0.0.0/0"]
 
-  security_group_id = "${aws_security_group.web.id}"
+  security_group_id = aws_security_group.web.id
 }
 resource "aws_security_group_rule" "web-https" {
   type = "ingress"
@@ -147,7 +166,7 @@ resource "aws_security_group_rule" "web-https" {
   cidr_blocks = [
     "0.0.0.0/0"]
 
-  security_group_id = "${aws_security_group.web.id}"
+  security_group_id = aws_security_group.web.id
 }
 resource "aws_security_group_rule" "web-outbound" {
   type = "egress"
@@ -157,5 +176,5 @@ resource "aws_security_group_rule" "web-outbound" {
   cidr_blocks = [
     "0.0.0.0/0"]
 
-  security_group_id = "${aws_security_group.web.id}"
+  security_group_id = aws_security_group.web.id
 }

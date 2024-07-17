@@ -6,23 +6,15 @@ resource "aws_efs_file_system" "example" {
     prevent_destroy = true
   }
 
-  tags {
+  tags = {
     Name = "Example filesystem"
   }
 }
 
-resource "aws_efs_mount_target" "example-mount-1" {
-  file_system_id = "${aws_efs_file_system.example.id}"
-  subnet_id      = "${data.aws_subnet_ids.default.ids[0]}"
-  security_groups = ["${aws_security_group.efs.id}"]
-}
-resource "aws_efs_mount_target" "example-mount-2" {
-  file_system_id = "${aws_efs_file_system.example.id}"
-  subnet_id      = "${data.aws_subnet_ids.default.ids[1]}"
-  security_groups = ["${aws_security_group.efs.id}"]
-}
-resource "aws_efs_mount_target" "example-mount-3" {
-  file_system_id = "${aws_efs_file_system.example.id}"
-  subnet_id      = "${data.aws_subnet_ids.default.ids[2]}"
-  security_groups = ["${aws_security_group.efs.id}"]
+resource "aws_efs_mount_target" "example-mount" {
+  for_each      = toset(data.aws_subnets.default.ids)
+
+  file_system_id = aws_efs_file_system.example.id
+  subnet_id      = each.value
+  security_groups = [aws_security_group.efs.id]
 }

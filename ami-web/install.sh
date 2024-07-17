@@ -33,11 +33,12 @@ chmod +x "$awslogs_file"
 sudo "$awslogs_file" -n -r eu-west-1 -c "/tmp/awslogs.conf"
 
 echo "[Log] Installing the EFS mount helper; we use this on instance start"
-cd /tmp
+sudo DEBIAN_FRONTEND=noninteractive apt install -y git binutils rustc cargo pkg-config libssl-dev
+cd "/tmp"
 git clone https://github.com/aws/efs-utils
-cd efs-utils
+cd "efs-utils"
 ./build-deb.sh
-sudo apt-get -y install ./build/amazon-efs-utils*deb
+sudo DEBIAN_FRONTEND=noninteractive apt -y install ./build/amazon-efs-utils*deb
 
 echo "[Log] Ensure we have the latest AWS systems manager to allow remote shell without SSH"
 sudo snap refresh amazon-ssm-agent --classic
