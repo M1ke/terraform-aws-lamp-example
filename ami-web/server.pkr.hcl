@@ -35,7 +35,7 @@ source "amazon-ebs" "builder-ubuntu" {
   enable_t2_unlimited = false
   encrypt_boot        = true
   instance_type       = "m7i.large"
-  region              = "eu-west-1"
+  region              = var.aws_region
   run_tags = {
     Name        = "Builder: web server"
     environment = "build"
